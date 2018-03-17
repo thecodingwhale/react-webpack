@@ -3,12 +3,26 @@ import { connect } from 'react-redux';
 
 class Tasks extends React.Component {
   render() {
-    console.log(this.props.tasks);
+    const { tasks } = this.props;
+    if (tasks === null) {
+      return (
+        <div>No Tasks</div>
+      )
+    }
+    const renderTasks = tasks.map(({ name, created_date, status }, index) => (
+      <div key={index}>
+        <div>Name: <strong>{name}</strong></div>
+        <div>Status: <strong>{status[0]}</strong></div>
+        <div>Created Date: <strong>{created_date}</strong></div>
+        <hr />
+      </div>
+    ));
     return (
       <div>
-        Tasks
+        <h1>Tasks</h1>
+        {renderTasks}
       </div>
-    );
+    )
   }
 }
 
