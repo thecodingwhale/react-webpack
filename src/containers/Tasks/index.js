@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Form from './Form';
 
 class Tasks extends React.Component {
-  render() {
-    const { tasks } = this.props;
-    if (tasks === null) {
-      return (
-        <div>No Tasks</div>
-      )
-    }
-    const renderTasks = tasks.map(({ name, created_date, status }, index) => (
+  constructor(props) {
+    super(props);
+  }
+
+  renderTasks() {
+    return this.props.tasks.map(({ name, created_date, status }, index) => (
       <div key={index}>
         <div>Name: <strong>{name}</strong></div>
         <div>Status: <strong>{status[0]}</strong></div>
@@ -17,12 +16,22 @@ class Tasks extends React.Component {
         <hr />
       </div>
     ));
+  }
+
+  render() {
+    const { tasks } = this.props;
+    if (tasks === null) {
+      return (
+        <div>No Tasks</div>
+      );
+    }
     return (
       <div>
         <h1>Tasks</h1>
-        {renderTasks}
+        <Form />
+        {this.renderTasks()}
       </div>
-    )
+    );
   }
 }
 
