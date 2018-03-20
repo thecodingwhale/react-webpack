@@ -13,7 +13,7 @@ import Home from './containers/Home';
 import Tasks from './containers/Tasks';
 import Page404 from './components/Page404';
 
-import 'sanitize.css/sanitize.css';
+import './style.scss';
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
