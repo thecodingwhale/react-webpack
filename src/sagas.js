@@ -1,6 +1,12 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import axios from "axios";
 
+import {
+  DELETE_TASK_REQUEST,
+  DELETE_TASK_SUCCESS,
+  DELETE_TASK_FAILURE,
+} from './containers/Tasks/constants';
+
 const API = {
   getAllTasks: () => {
     return axios({
@@ -18,6 +24,14 @@ const API = {
         name: title,
       },
     });
+  },
+
+  deleteTask: (id) => {
+    return axios({
+      method: "delete",
+      url: `http://localhost:3000/tasks/${id}`,
+      config: { headers: {'Content-Type': 'application/x-www-form-urlencoded' }},
+    });
   }
 }
 
@@ -30,6 +44,21 @@ function* addNewTask({ title }) {
   }
 }
 
+function* deleteTask({ id, index }) {
+  try {
+    const response = yield call(API.deleteTask, id);
+    yield put({
+      type: DELETE_TASK_SUCCESS,
+      index,
+    });
+  } catch (error) {
+    yield put({
+      type: DELETE_TASK_FAILURE,
+      error,
+    });
+  }
+}
+
 export default function* workerSaga() {
   try {
     const response = yield call(API.getAllTasks);
@@ -39,4 +68,5 @@ export default function* workerSaga() {
     yield put({ type: "API_CALL_FAILURE", error });
   }
   yield takeLatest('API_ADDING_NEW_TASK', addNewTask);
+  yield takeLatest(DELETE_TASK_REQUEST, deleteTask);
 }

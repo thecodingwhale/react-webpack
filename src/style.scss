@@ -1,5 +1,12 @@
 @import '~sanitize.css/sanitize.css';
 
-body {
-  color: red;
+.tasks {
+  &__list {
+    position: relative;
+    &__button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
 }

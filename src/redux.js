@@ -1,3 +1,8 @@
+import {
+  DELETE_TASK_SUCCESS,
+  DELETE_TASK_FAILURE,
+} from './containers/Tasks/constants';
+
 // action types
 const API_CALL_REQUEST = "API_CALL_REQUEST";
 const API_CALL_SUCCESS = "API_CALL_SUCCESS";
@@ -28,6 +33,7 @@ export function reducer(state = initialState, action) {
       break;
     case API_ADDING_NEW_TASK:
       return { ...state, taskSubmitting: true, error: null };
+      break;
     case API_CALL_ADD_TASK_SUCCESS:
       return {
         ...state,
@@ -35,6 +41,16 @@ export function reducer(state = initialState, action) {
         error: null,
         tasks: [action.payload, ...state.tasks]
       };
+      break;
+    case DELETE_TASK_FAILURE:
+      return { ...state, fetching: false, tasks: null, error: action.error };
+      break;
+    case DELETE_TASK_SUCCESS:
+      return {
+        ...state,
+        tasks: state.tasks.slice(0,action.index).concat(state.tasks.slice(action.index+1))
+      };
+      break;
     default:
       return state;
   }
