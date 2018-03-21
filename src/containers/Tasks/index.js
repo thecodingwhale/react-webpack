@@ -33,25 +33,27 @@ class Tasks extends React.Component {
         >
           Delete
         </button>
-        <hr />
       </div>
     ));
   }
 
+  render
   render() {
-    const { tasks } = this.props;
-    if (tasks === null) {
-      return (
-        <div>No Tasks</div>
-      );
+    const { fetching, tasks } = this.props;
+    let content = null;
+    if (fetching) {
+      content = <div className="alert">Fetching...</div>;
     }
+    content = (tasks === null || tasks.length === 0) ? <div className="alert">No Tasks</div> : (
+      <div className="tasks">
+        {this.renderTasks()}
+      </div>
+    );
     return (
-      <div>
+      <div className="content">
         <h1>Tasks</h1>
         <Form />
-        <div className="tasks">
-          {this.renderTasks()}
-        </div>
+        {content}
       </div>
     );
   }

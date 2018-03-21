@@ -1,8 +1,35 @@
 @import '~sanitize.css/sanitize.css';
 
+$primaryColor: #007eff;
+
+body {
+  background-color: #f1f1f1;
+  font-family: 'Nunito', sans-serif;
+}
+
+
+.alert {
+  padding: 8px 12px;
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-left: 5px solid #d1d1d1;
+}
+
+.content {
+  padding: 0px 15px;
+}
+
 .tasks {
   &__list {
+    background-color: rgb(255, 255, 255);
     position: relative;
+    cursor: pointer;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    border-left: 8px solid $primaryColor;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.51);
+    }
     &__button {
       position: absolute;
       top: 0;
