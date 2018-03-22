@@ -15,13 +15,14 @@ const API = {
     });
   },
 
-  addNewTask: (title) => {
+  addNewTask: (title, status) => {
     return axios({
       method: "post",
       url: "http://localhost:3000/tasks",
       config: { headers: {'Content-Type': 'application/x-www-form-urlencoded' }},
       data: {
         name: title,
+        status,
       },
     });
   },
@@ -35,9 +36,9 @@ const API = {
   }
 }
 
-function* addNewTask({ title }) {
+function* addNewTask({ title, status }) {
   try {
-    const response = yield call(API.addNewTask, title);
+    const response = yield call(API.addNewTask, title, status);
     yield put({ type: "API_CALL_ADD_TASK_SUCCESS", payload: response.data });
   } catch (error) {
     yield put({ type: "API_CALL_ADD_TASK_FAILURE", error });

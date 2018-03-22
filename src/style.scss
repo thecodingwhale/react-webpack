@@ -30,10 +30,10 @@ body {
     &:hover {
       background-color: rgba(255, 255, 255, 0.51);
     }
-    &__button {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
+  }
+  &__actions {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 }

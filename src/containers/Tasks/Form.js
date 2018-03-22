@@ -1,32 +1,49 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+const options = [
+  'pending',
+  'ongoing',
+  'completed',
+];
+
+const DEFAULT_STATUS = 'pending';
+
 class Form extends React.Component {
   constructor() {
     super();
     this.state = {
       title: '',
+      status: DEFAULT_STATUS,
     };
 
     this.onSubmit = this.onSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.onChangeTitle = this.onChangeTitle.bind(this);
+    this.onChangeStatus = this.onChangeStatus.bind(this);
   }
 
   onSubmit(event) {
     event.preventDefault();
     if (this.state.title === '') return false;
-    const { title } = this.state;
+    const { title, status } = this.state;
     this.setState({
       title: '',
+      status: DEFAULT_STATUS,
     }, () => {
-      this.props.onAddTask(title);
+      this.props.onAddTask(title, status);
     });
   }
 
-  onChange(event) {
-    this.setState({
+  onChangeTitle(event) {
+    this.setState(Object.assign(this.state, {
       title: event.target.value,
-    });
+    }));
+  }
+
+  onChangeStatus(event) {
+    this.setState(Object.assign(this.state, {
+      status: event.target.value,
+    }));
   }
 
   renderError() {
@@ -40,6 +57,14 @@ class Form extends React.Component {
     return null;
   };
 
+  renderSelect() {
+    return (
+      <select onChange={this.onChangeStatus}>
+        {options.map((option, index) => (<option key={index} value={option}>{option}</option>))}
+      </select>
+    );
+  }
+
   render() {
     const { taskSubmitting } = this.props;
     const renderSubmitText = taskSubmitting ? 'Submitting...' : 'Submit';
@@ -51,12 +76,13 @@ class Form extends React.Component {
             <input
               type="text"
               placeholder="title"
-              onChange={this.onChange}
+              onChange={this.onChangeTitle}
               value={this.state.title}
             />
           </p>
           <p>
             <label htmlFor="status">Status:</label>
+            {this.renderSelect()}
           </p>
           <button type="submit">{renderSubmitText}</button>
         </fieldset>
@@ -75,9 +101,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddTask: (title) => dispatch({
+    onAddTask: (title, status) => dispatch({
       type: "API_ADDING_NEW_TASK",
       title,
+      status,
     })
   };
 };

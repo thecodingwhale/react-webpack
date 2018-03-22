@@ -9,10 +9,6 @@ class Tasks extends React.Component {
     super(props);
   }
 
-  onDelete() {
-
-  }
-
   renderTasks() {
     return this.props.tasks.map(({ _id, name, created_date, status }, index) => (
       <div
@@ -22,17 +18,21 @@ class Tasks extends React.Component {
         <div>Name: <strong>{name}</strong></div>
         <div>Status: <strong>{status[0]}</strong></div>
         <div>Created Date: <strong>{created_date}</strong></div>
-        <button
-          type="button"
-          className="tasks__list__button"
-          onClick={() => {
-            event.preventDefault();
-            const id = _id;
-            this.props.onDeleteTask(id, index);
-          }}
-        >
-          Delete
-        </button>
+        <div className="tasks__actions">
+          <button>
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              event.preventDefault();
+              const id = _id;
+              this.props.onDeleteTask(id, index);
+            }}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     ));
   }
