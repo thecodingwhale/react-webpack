@@ -22,6 +22,16 @@ class Form extends React.Component {
     this.onChangeStatus = this.onChangeStatus.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.params) {
+      const { name, status } = this.props.params;
+      this.setState({
+        title: name,
+        status: status,
+      });
+    }
+  }
+
   onSubmit(event) {
     event.preventDefault();
     if (this.state.title === '') return false;
@@ -59,8 +69,18 @@ class Form extends React.Component {
 
   renderSelect() {
     return (
-      <select onChange={this.onChangeStatus}>
-        {options.map((option, index) => (<option key={index} value={option}>{option}</option>))}
+      <select
+        onChange={this.onChangeStatus}
+        value={this.state.status}
+      >
+        {options.map((option, index) => (
+          <option
+            key={index}
+            value={option}
+          >
+            {option}
+          </option>
+        ))}
       </select>
     );
   }

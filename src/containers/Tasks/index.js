@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Form from './Form';
 
-import { DELETE_TASK_REQUEST } from './constants';
+import {
+  DELETE_TASK_REQUEST,
+  EDIT_TASK_REQUEST,
+  EDIT_TASK_REQUEST_CANCEL,
+} from './constants';
 
 class Tasks extends React.Component {
   constructor(props) {
@@ -10,16 +14,35 @@ class Tasks extends React.Component {
   }
 
   renderTasks() {
-    return this.props.tasks.map(({ _id, name, created_date, status }, index) => (
-      <div
-        key={index}
-        className="tasks__list"
-      >
-        <div>Name: <strong>{name}</strong></div>
-        <div>Status: <strong>{status[0]}</strong></div>
-        <div>Created Date: <strong>{created_date}</strong></div>
-        <div className="tasks__actions">
-          <button>
+    return this.props.tasks.map(({ _id, name, created_date, status, editing }, index) => {
+      const content = !editing ? (
+        <div>
+          <div>Name: <span className="tasks__list__name">{name}</span></div>
+          <div>Status: <span className="tasks__list__status">{status[0]}</span></div>
+          <div>Created Date: <strong>{created_date}</strong></div>
+        </div>
+      ) : (
+        <div>
+          <Form
+            {...{
+              editing: true,
+              params: {
+                _id,
+                name,
+                status: status[0],
+                index,
+              }
+            }}
+          />
+        </div>
+      );
+      const actions = !editing ? (
+        <div>
+          <button
+            onClick={(event) => {
+              this.props.onEditTask(index);
+            }}
+          >
             Edit
           </button>
           <button
@@ -33,8 +56,31 @@ class Tasks extends React.Component {
             Delete
           </button>
         </div>
-      </div>
-    ));
+      ) : (
+        <div>
+          <button
+            type="button"
+            onClick={() => this.props.onCancelEditTask(index)}
+          >
+            Cancel
+          </button>
+        </div>
+      );
+      return (
+        <div
+          key={index}
+          className="tasks__list"
+        >
+          <div>
+            {content}
+            <div className="tasks__actions">
+              {actions}
+            </div>
+          </div>
+        </div>
+      );
+    });
+
   }
 
   render
@@ -75,6 +121,14 @@ const mapDispatchToProps = dispatch => {
       id,
       index,
     }),
+    onEditTask: (index) => dispatch({
+      type: EDIT_TASK_REQUEST,
+      index,
+    }),
+    onCancelEditTask: (index) => dispatch({
+      type: EDIT_TASK_REQUEST_CANCEL,
+      index,
+    })
   };
 };
 

@@ -1,6 +1,9 @@
 import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILURE,
+
+  EDIT_TASK_REQUEST,
+  EDIT_TASK_REQUEST_CANCEL,
 } from './containers/Tasks/constants';
 
 // action types
@@ -48,7 +51,25 @@ export function reducer(state = initialState, action) {
     case DELETE_TASK_SUCCESS:
       return {
         ...state,
-        tasks: state.tasks.slice(0,action.index).concat(state.tasks.slice(action.index+1))
+        tasks: state.tasks.slice(0, action.index).concat(state.tasks.slice(action.index + 1))
+      };
+      break;
+    case EDIT_TASK_REQUEST:
+      return {
+        ...state,
+        tasks: [
+          ...state.tasks,
+          ...state.tasks[action.index].editing = true,
+        ],
+      };
+      break;
+    case EDIT_TASK_REQUEST_CANCEL:
+      return {
+        ...state,
+        tasks: [
+          ...state.tasks,
+          ...state.tasks[action.index].editing = false,
+        ],
       };
       break;
     default:

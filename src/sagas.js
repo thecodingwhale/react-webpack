@@ -5,6 +5,8 @@ import {
   DELETE_TASK_REQUEST,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILURE,
+
+  EDIT_TASK_REQUEST,
 } from './containers/Tasks/constants';
 
 const API = {
