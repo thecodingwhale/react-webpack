@@ -27,3 +27,6 @@ https://daveceddia.com/immutable-updates-react-redux/
 
 Good to great UI animation tips (please apply this one when you start adding animations to your UI)
 https://uxdesign.cc/good-to-great-ui-animation-tips-7850805c12e5
+
+Apply immutability-helper to all state reducers
+https://github.com/kolodny/immutability-helper
