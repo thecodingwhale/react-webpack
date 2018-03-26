@@ -7,6 +7,9 @@ import {
   DELETE_TASK_FAILURE,
 
   EDIT_TASK_REQUEST,
+  EDIT_TASK_API_REQUEST,
+  EDIT_TASK_API_REQUEST_SUCCESS,
+  EDIT_TASK_API_REQUEST_FAILURE,
 } from './containers/Tasks/constants';
 
 const API = {
@@ -35,6 +38,18 @@ const API = {
       url: `http://localhost:3000/tasks/${id}`,
       config: { headers: {'Content-Type': 'application/x-www-form-urlencoded' }},
     });
+  },
+
+  updateTask: ({ id, title, status }) => {
+    return axios({
+      method: "put",
+      url: `http://localhost:3000/tasks/${id}`,
+      config: { headers: {'Content-Type': 'application/x-www-form-urlencoded' }},
+      data: {
+        name: title,
+        status,
+      },
+    });
   }
 }
 
@@ -62,6 +77,24 @@ function* deleteTask({ id, index }) {
   }
 }
 
+function* editTask({ params }) {
+  try {
+    const response = yield call(API.updateTask, params);
+    yield put({
+      type: EDIT_TASK_API_REQUEST_SUCCESS,
+      payload: {
+        index: params.index,
+        data: response.data,
+      },
+    });
+  } catch (error) {
+    yield put({
+      type: EDIT_TASK_API_REQUEST_FAILURE,
+      error,
+    });
+  }
+}
+
 export default function* workerSaga() {
   try {
     const response = yield call(API.getAllTasks);
@@ -72,4 +105,5 @@ export default function* workerSaga() {
   }
   yield takeLatest('API_ADDING_NEW_TASK', addNewTask);
   yield takeLatest(DELETE_TASK_REQUEST, deleteTask);
+  yield takeLatest(EDIT_TASK_API_REQUEST, editTask)
 }

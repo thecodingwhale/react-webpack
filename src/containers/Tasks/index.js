@@ -14,6 +14,7 @@ class Tasks extends React.Component {
   }
 
   renderTasks() {
+    console.log(this.props.tasks);
     return this.props.tasks.map(({ _id, name, created_date, status, editing }, index) => {
       const content = !editing ? (
         <div>

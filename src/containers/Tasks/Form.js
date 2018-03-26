@@ -1,5 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import {
+  EDIT_TASK_API_REQUEST,
+} from './constants';
 
 const options = [
   'pending',
@@ -36,12 +39,28 @@ class Form extends React.Component {
     event.preventDefault();
     if (this.state.title === '') return false;
     const { title, status } = this.state;
-    this.setState({
-      title: '',
-      status: DEFAULT_STATUS,
-    }, () => {
-      this.props.onAddTask(title, status);
-    });
+
+    if (this.props.editing) {
+      this.setState({
+        title,
+        status,
+      }, () => {
+        const { _id, index } = this.props.params;
+        this.props.onEditTask({
+          index,
+          id: _id,
+          title,
+          status,
+        });
+      });
+    } else {
+      this.setState({
+        title: '',
+        status: DEFAULT_STATUS,
+      }, () => {
+        this.props.onAddTask(title, status);
+      });
+    }
   }
 
   onChangeTitle(event) {
@@ -86,7 +105,7 @@ class Form extends React.Component {
   }
 
   render() {
-    const { taskSubmitting } = this.props;
+    const { editing, taskSubmitting } = this.props;
     const renderSubmitText = taskSubmitting ? 'Submitting...' : 'Submit';
     return (
       <form onSubmit={this.onSubmit}>
@@ -125,6 +144,10 @@ const mapDispatchToProps = dispatch => {
       type: "API_ADDING_NEW_TASK",
       title,
       status,
+    }),
+    onEditTask: (params) => dispatch({
+      type: EDIT_TASK_API_REQUEST,
+      params,
     })
   };
 };

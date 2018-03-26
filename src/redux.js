@@ -1,9 +1,12 @@
+import update from 'immutability-helper';
+
 import {
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILURE,
 
   EDIT_TASK_REQUEST,
   EDIT_TASK_REQUEST_CANCEL,
+  EDIT_TASK_API_REQUEST_SUCCESS,
 } from './containers/Tasks/constants';
 
 // action types
@@ -71,6 +74,20 @@ export function reducer(state = initialState, action) {
           ...state.tasks[action.index].editing = false,
         ],
       };
+      break;
+    case EDIT_TASK_API_REQUEST_SUCCESS:
+      const { index, data } = action.payload;
+      const { name, status, created_date } = data;
+      return update(state, {
+        tasks: {
+          [index]: {
+            editing: {$set: false},
+            name: {$set: name},
+            status: {$set: status},
+            created_date: {$set: created_date},
+          }
+        }
+      });
       break;
     default:
       return state;
