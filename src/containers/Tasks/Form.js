@@ -26,6 +26,8 @@ class Form extends React.Component {
   }
 
   componentDidMount() {
+    this.nameInput.focus();
+
     if (this.props.params) {
       const { name, status } = this.props.params;
       this.setState({
@@ -52,6 +54,7 @@ class Form extends React.Component {
           title,
           status,
         });
+        this.nameInput.focus();
       });
     } else {
       this.setState({
@@ -59,8 +62,10 @@ class Form extends React.Component {
         status: DEFAULT_STATUS,
       }, () => {
         this.props.onAddTask(title, status);
+        this.nameInput.focus();
       });
     }
+
   }
 
   onChangeTitle(event) {
@@ -113,6 +118,7 @@ class Form extends React.Component {
           <p>
             <label htmlFor="title">Title</label>
             <input
+              ref={(input) => { this.nameInput = input; }}
               type="text"
               placeholder="title"
               onChange={this.onChangeTitle}
